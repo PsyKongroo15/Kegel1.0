@@ -8,11 +8,8 @@ function handleButton(button){
     const tipo = button.getAttribute('data-tipo');
     const accion = button.getAttribute('data-accion');
     let countdown;
-    let toggle = true; // Variable para alternar entre mensajes en el intervalo
-    let ended = false; // Booleano que utilizare para saber si el ejercicio esta terminado o no
-    let reps;
-    let message;
-
+    let toggle = true; // Variable para alternar entre mensajes en el intervalo. Cambia de estado
+    
     console.log(`Boton de tipo: ${tipo}, accion: ${accion}.`)
 
     switch(tipo){
@@ -25,31 +22,31 @@ function handleButton(button){
              // Contracciones rapidas
                 countdown = 10;
 
-                     interval = setInterval(() => { 
-                        if (countdown > 0) {
-                            ended = false;
-                            if (toggle) {
-                                div_showContent.innerHTML = 
-                                "<h1>" +mensaje_exhala + "</h1>" 
-                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+                function ContraccionesRapidas(){
+                    if (countdown > 0) {
+                        if (toggle) {
+                            div_showContent.innerHTML = 
+                            "<h1>" +mensaje_exhala + "</h1>" 
+                            + "<h2> Repiticiones restantes: " + countdown + "</h2>";
 
-                                div_showContent.style.backgroundColor = "#cc0000";
-                            } else {
-                                div_showContent.innerHTML = 
-                                "<h1>" +mensaje_inhala + "</h1>"
-                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
-
-                                div_showContent.style.backgroundColor = "green";
-                                countdown--;
-                            } 
-                            toggle = !toggle;
-            
+                            div_showContent.style.backgroundColor = "#cc0000";
                         } else {
-                            div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
-                            div_showContent.style.backgroundColor = "";
-                            ended = true;
-                        }
-                    }, 1000) 
+                            div_showContent.innerHTML = 
+                            "<h1>" +mensaje_inhala + "</h1>"
+                            + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+
+                            div_showContent.style.backgroundColor = "green";
+                            countdown--;
+                        } 
+                        toggle = !toggle;
+        
+                    } else {
+                        EndExercise();
+                    }
+                }
+
+                ContraccionesRapidas();
+                interval = setInterval(ContraccionesRapidas, 1000);
    
                   /*  setTimeout(() => {
                         div_showContent.innerHTML = "<h1>Repeticiones restantes: " + exhala + "</h1>";
@@ -61,11 +58,7 @@ function handleButton(button){
                 console.log('Se inicia el cronometro');
             } else if (accion == 'parar') {
                 console.log('Se para el cronometro');
-                             clearInterval(interval);
-                            div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
-                            div_showContent.style.backgroundColor = "";
-                            ended = true;
-                            checkEnded(ended);
+                             EndExercise();
             }
             break;
 
@@ -77,60 +70,72 @@ function handleButton(button){
             if (accion == 'iniciar'){
                 console.log('Se inicia el cronometro');
                 countdown = 10;
+                
                 // Contracciones lentas
                 // Vamos a necesitar usar setTimeout() para lograr que se muestren 5 y 3 segundos
            
-                 // Funcion principal que maneja la logica del contador y contenido
-                     const updateContent = () => { 
-                        if (countdown > 0) {
-                            ended = false;
-                            if (toggle) {
-                                div_showContent.innerHTML = 
-                                "<h1>" +mensaje_exhala + "</h1>" 
-                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
-                                // Color fondo
-                                div_showContent.style.backgroundColor = "#cc0000";
-                                // Continua despues de 5 segundos
-                                timeOut5S = setTimeout(updateContent, 5000);
+                 // Funcion anonima flecha que lleva a cabo el bucle
+                    function ContraccionesLentas(){ 
+                            if (countdown > 0) {
+                                if (toggle) {
+                                    div_showContent.innerHTML = 
+                                    "<h1>" +mensaje_exhala + "</h1>" 
+                                    + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+                                    // Color fondo
+                                    div_showContent.style.backgroundColor = "#cc0000";
+                                    // Continua despues de 5 segundos
+                                    timeOut5S = setTimeout(ContraccionesLentas, 5000);
+                                } else {
+                                    div_showContent.innerHTML = 
+                                    "<h1>" +mensaje_inhala + "</h1>"
+                                    + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+    
+                                    div_showContent.style.backgroundColor = "green";
+                                    countdown--;
+                                   
+                                   timeOut3S = setTimeout(ContraccionesLentas, 3000);
+                                } 
+                                toggle = !toggle;
+                
                             } else {
-                                div_showContent.innerHTML = 
-                                "<h1>" +mensaje_inhala + "</h1>"
-                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
-
-                                div_showContent.style.backgroundColor = "green";
-                                countdown--;
-                               
-                               timeOut3S = setTimeout(updateContent, 3000);
-                            } 
-                            toggle = !toggle;
-            
-                        } else {
-                            div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
-                            div_showContent.style.backgroundColor = "";
-                            ended = true;
-                        }
-                    };
-                    
-                    updateContent(); // Iniciar el ciclo
-
+                                EndExercise();
+                            }
+                    }
+                    ContraccionesLentas(); // Iniciar el ciclo
             } else if (accion == 'parar') {
+                EndExercise();
                 console.log('Se para el cronometro');
-                clearTimeout(timeOut5S);
-                clearTimeout(timeOut3S);
-                div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
-                div_showContent.style.backgroundColor = "";
-                ended = true;
-                checkEnded(ended);
             }
             break;
 
-            function checkEnded(ended){
-                if (ended = true) {
-                    div_showContent.innerHTML = 
-                     "  <h1>Exhala | Inhala </h1>" +
-                     " <h1>Lo hiciste bien</h1>"
-                     div_showContent.style.backgroundColor = "";
+
+
+        // Logica para finalizar el ejercicio independientemente de donde se intente finalizar.
+            function EndExercise(){
+                // Limpia el intervalo que hace el bucle de las rapidas
+                if (interval){
+                    clearInterval(interval);
+                    endContent();
+                } 
+                // Limpia los timeouts que hacen el bucle de las lentas
+                if (timeOut5S){
+                    clearTimeout(timeOut5S);
+                    endContent();
                 }
+
+                if (timeOut3S){
+                    clearTimeout(timeOut3S);
+                }
+
+                // Muestra el contenido de ejercicio finalizado
+                function endContent(){
+                    div_showContent.innerHTML = 
+                    "  <h1>Exhala | Inhala </h1>" +
+                    " <h1>Lo hiciste bien</h1>"
+                    div_showContent.style.backgroundColor = "pink";
+                }
+                
+
             }
 
 
