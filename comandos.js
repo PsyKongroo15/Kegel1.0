@@ -33,7 +33,7 @@ function handleButton(button){
                                 "<h1>" +mensaje_exhala + "</h1>" 
                                 + "<h2> Repiticiones restantes: " + countdown + "</h2>";
 
-                                div_showContent.style.backgroundColor = "red";
+                                div_showContent.style.backgroundColor = "#cc0000";
                             } else {
                                 div_showContent.innerHTML = 
                                 "<h1>" +mensaje_inhala + "</h1>"
@@ -57,11 +57,7 @@ function handleButton(button){
 
                     */
 
-                   /* setTimeout(() => {
-                        console.log('Repeticion numero: ' + i);
-                        div_showContent.innerHTML = "<h1>Repeticiones restantes: " + countdown + "</h1>";
-                        countdown--;
-                    }, 1000 * (10 - i)); */
+
                 console.log('Se inicia el cronometro');
             } else if (accion == 'parar') {
                 console.log('Se para el cronometro');
@@ -93,7 +89,7 @@ function handleButton(button){
                                 "<h1>" +mensaje_exhala + "</h1>" 
                                 + "<h2> Repiticiones restantes: " + countdown + "</h2>";
                                 // Color fondo
-                                div_showContent.style.backgroundColor = "red";
+                                div_showContent.style.backgroundColor = "#cc0000";
                                 // Continua despues de 5 segundos
                                 timeOut5S = setTimeout(updateContent, 5000);
                             } else {
