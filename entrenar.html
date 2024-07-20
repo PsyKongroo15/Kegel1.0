@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ejercicios Kegel para mejorar tu suelo pelvico">
+    <title>Kegels Trainer</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <main>
+            <!-- nav bar -->
+            <ul class="nav-bar">
+                <li class="li-bar"><a href="home.html">Home</a></li>
+                <li class="li-bar"><a href="entrenar.html">Entrenar</a></li>
+                <li class="li-bar"><a href="completados.html">Completados</a></li>
+            </ul>
+
+        <div class="entrenar"> 
+            <div class="seccion">
+                <h1>Contracciones rapidas</h1>
+                <button onclick="handleButton(this)" data-tipo="rapidas" data-accion="iniciar" class="boton">Iniciar</button>
+                <button onclick="handleButton(this)" data-tipo="rapidas" data-accion="parar" class="boton">Parar</button>
+            </div>
+            <div class="seccion">
+                <h1>Contracciones lentas</h1>
+                <button onclick="handleButton(this)" data-tipo="lentas" data-accion="iniciar" class="boton">Iniciar</button>
+                <button onclick="handleButton(this)" data-tipo="lentas" data-accion="parar" class="boton">Parar</button>
+            </div>
+            <!-- Mostrar contenido-->
+            <div class="showContent">
+                <h1>Exhala | Inhala</h1>
+                <h1>3 repiticiones restantes</h1>
+            </div>
+        </div>    
+
+  
+        </main>
+    </div>    
+    <script src="comandos.js"></script>
+</body>
+</html>

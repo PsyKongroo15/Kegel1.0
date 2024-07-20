@@ -1,0 +1,156 @@
+const div_showContent = document.querySelector(".showContent"); 
+let mensaje_inhala = 'Relaja / Inhala';
+let mensaje_exhala = 'Contrae / Exhala';
+let mensaje_final = 'Ejercicio finalizado';
+let interval;
+
+function handleButton(button){
+    const tipo = button.getAttribute('data-tipo');
+    const accion = button.getAttribute('data-accion');
+    let countdown;
+    let toggle = true; // Variable para alternar entre mensajes en el intervalo
+    let ended = false; // Booleano que utilizare para saber si el ejercicio esta terminado o no
+    let reps;
+    let message;
+
+    console.log(`Boton de tipo: ${tipo}, accion: ${accion}.`)
+
+    switch(tipo){
+        case 'rapidas': 
+            if (accion =='iniciar'){
+             // Countdown para contar repeticiones restantes
+             // Cuando muestra el mensaje 2 (inhhala/relaja) resta 1 al countdown
+             // Altenar el toggle en cada intervalo (segundo) 
+             
+             // Contracciones rapidas
+                countdown = 10;
+
+                     interval = setInterval(() => { 
+                        if (countdown > 0) {
+                            ended = false;
+                            if (toggle) {
+                                div_showContent.innerHTML = 
+                                "<h1>" +mensaje_exhala + "</h1>" 
+                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+
+                                div_showContent.style.backgroundColor = "red";
+                            } else {
+                                div_showContent.innerHTML = 
+                                "<h1>" +mensaje_inhala + "</h1>"
+                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+
+                                div_showContent.style.backgroundColor = "green";
+                                countdown--;
+                            } 
+                            toggle = !toggle;
+            
+                        } else {
+                            div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
+                            div_showContent.style.backgroundColor = "";
+                            ended = true;
+                        }
+                    }, 1000) 
+   
+                  /*  setTimeout(() => {
+                        div_showContent.innerHTML = "<h1>Repeticiones restantes: " + exhala + "</h1>";
+                    }, 1000);
+
+                    */
+
+                   /* setTimeout(() => {
+                        console.log('Repeticion numero: ' + i);
+                        div_showContent.innerHTML = "<h1>Repeticiones restantes: " + countdown + "</h1>";
+                        countdown--;
+                    }, 1000 * (10 - i)); */
+                console.log('Se inicia el cronometro');
+            } else if (accion == 'parar') {
+                console.log('Se para el cronometro');
+                             clearInterval(interval);
+                            div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
+                            div_showContent.style.backgroundColor = "";
+                            ended = true;
+                            checkEnded(ended);
+            }
+            break;
+
+
+
+
+
+        case 'lentas':
+            if (accion == 'iniciar'){
+                console.log('Se inicia el cronometro');
+                countdown = 10;
+                // Contracciones lentas
+                // Vamos a necesitar usar setTimeout() para lograr que se muestren 5 y 3 segundos
+           
+                 // Funcion principal que maneja la logica del contador y contenido
+                     const updateContent = () => { 
+                        if (countdown > 0) {
+                            ended = false;
+                            if (toggle) {
+                                div_showContent.innerHTML = 
+                                "<h1>" +mensaje_exhala + "</h1>" 
+                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+                                // Color fondo
+                                div_showContent.style.backgroundColor = "red";
+                                // Continua despues de 5 segundos
+                                timeOut5S = setTimeout(updateContent, 5000);
+                            } else {
+                                div_showContent.innerHTML = 
+                                "<h1>" +mensaje_inhala + "</h1>"
+                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+
+                                div_showContent.style.backgroundColor = "green";
+                                countdown--;
+                               
+                               timeOut3S = setTimeout(updateContent, 3000);
+                            } 
+                            toggle = !toggle;
+            
+                        } else {
+                            div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
+                            div_showContent.style.backgroundColor = "";
+                            ended = true;
+                        }
+                    };
+                    
+                    updateContent(); // Iniciar el ciclo
+
+            } else if (accion == 'parar') {
+                console.log('Se para el cronometro');
+                clearTimeout(timeOut5S);
+                clearTimeout(timeOut3S);
+                div_showContent.innerHTML = "<h1>" +mensaje_final + "</h1>";
+                div_showContent.style.backgroundColor = "";
+                ended = true;
+                checkEnded(ended);
+            }
+            break;
+
+            function checkEnded(ended){
+                if (ended = true) {
+                    div_showContent.innerHTML = 
+                     "  <h1>Exhala | Inhala </h1>" +
+                     " <h1>Lo hiciste bien</h1>"
+                     div_showContent.style.backgroundColor = "";
+                }
+            }
+
+
+    }
+
+   /* if (tipo == 'rapidas' && accion=='iniciar'){
+       //  console.log('La mama de la mama')
+        for (i = 10; i > 0; i--){
+            console.log(`Faltan ${i} repeticiones`);
+        }
+    }
+    */
+
+
+
+
+  
+
+}
