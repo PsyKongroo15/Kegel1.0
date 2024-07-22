@@ -1,8 +1,11 @@
 const div_showContent = document.querySelector(".showContent"); 
+const div_seccion1 = document.querySelector(".seccion1");
+const div_seccion2 = document.querySelector(".seccion2");
 let mensaje_inhala = 'Relaja / Inhala';
 let mensaje_exhala = 'Contrae / Exhala';
 let mensaje_final = 'Ejercicio finalizado';
 let interval;
+let working = false;
 
 function handleButton(button){
     const tipo = button.getAttribute('data-tipo');
@@ -15,47 +18,43 @@ function handleButton(button){
     switch(tipo){
         case 'rapidas': 
             if (accion =='iniciar'){
-             // Countdown para contar repeticiones restantes
-             // Cuando muestra el mensaje 2 (inhhala/relaja) resta 1 al countdown
-             // Altenar el toggle en cada intervalo (segundo) 
-             
-             // Contracciones rapidas
+                console.log('Se inicia el cronometro');
                 countdown = 10;
 
-                function ContraccionesRapidas(){
-                    if (countdown > 0) {
-                        if (toggle) {
-                            div_showContent.innerHTML = 
-                            "<h1>" +mensaje_exhala + "</h1>" 
-                            + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+                if (working) {
+                    EndExercise();
+                } else {
+                    working = true;
+            // Altenar el toggle en cada intervalo (segundo) 
+            // La seccion activa cambia el color de fondo
+                    div_seccion1.style.backgroundColor = "rgb(35, 199, 191)";
+                 // Contracciones rapidas
+                    function ContraccionesRapidas(){
+                        if (countdown > 0) {
+                            if (toggle) {
+                                div_showContent.innerHTML = 
+                                "<h1>" +mensaje_exhala + "</h1>" 
+                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
 
-                            div_showContent.style.backgroundColor = "#cc0000";
+                                div_showContent.style.backgroundColor = "#cc0000";
+                            } else {
+                                div_showContent.innerHTML = 
+                                "<h1>" +mensaje_inhala + "</h1>"
+                                + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+
+                                div_showContent.style.backgroundColor = "green";
+                                countdown--;
+                            } 
+                            toggle = !toggle;
+            
                         } else {
-                            div_showContent.innerHTML = 
-                            "<h1>" +mensaje_inhala + "</h1>"
-                            + "<h2> Repiticiones restantes: " + countdown + "</h2>";
-
-                            div_showContent.style.backgroundColor = "green";
-                            countdown--;
-                        } 
-                        toggle = !toggle;
-        
-                    } else {
-                        EndExercise();
+                            EndExercise();
+                        }
                     }
+                    ContraccionesRapidas(); // Llamada directa a la funcion, evitamos el delay al iniciar
+                    interval = setInterval(ContraccionesRapidas, 1000);
                 }
 
-                ContraccionesRapidas();
-                interval = setInterval(ContraccionesRapidas, 1000);
-   
-                  /*  setTimeout(() => {
-                        div_showContent.innerHTML = "<h1>Repeticiones restantes: " + exhala + "</h1>";
-                    }, 1000);
-
-                    */
-
-
-                console.log('Se inicia el cronometro');
             } else if (accion == 'parar') {
                 console.log('Se para el cronometro');
                              EndExercise();
@@ -70,38 +69,46 @@ function handleButton(button){
             if (accion == 'iniciar'){
                 console.log('Se inicia el cronometro');
                 countdown = 10;
-                
-                // Contracciones lentas
-                // Vamos a necesitar usar setTimeout() para lograr que se muestren 5 y 3 segundos
-           
-                 // Funcion anonima flecha que lleva a cabo el bucle
-                    function ContraccionesLentas(){ 
-                            if (countdown > 0) {
-                                if (toggle) {
-                                    div_showContent.innerHTML = 
-                                    "<h1>" +mensaje_exhala + "</h1>" 
-                                    + "<h2> Repiticiones restantes: " + countdown + "</h2>";
-                                    // Color fondo
-                                    div_showContent.style.backgroundColor = "#cc0000";
-                                    // Continua despues de 5 segundos
-                                    timeOut5S = setTimeout(ContraccionesLentas, 5000);
-                                } else {
-                                    div_showContent.innerHTML = 
-                                    "<h1>" +mensaje_inhala + "</h1>"
-                                    + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+
+                if (working){
+                    EndExercise();
+                } else {
+                    working = true;
+                    // Contracciones lentas
+                    // Vamos a necesitar usar setTimeout() para lograr que se muestren 5 y 3 segundos
     
-                                    div_showContent.style.backgroundColor = "green";
-                                    countdown--;
-                                   
-                                   timeOut3S = setTimeout(ContraccionesLentas, 3000);
-                                } 
-                                toggle = !toggle;
-                
-                            } else {
-                                EndExercise();
-                            }
-                    }
-                    ContraccionesLentas(); // Iniciar el ciclo
+                    // La seccion activa cambia el color de fondo
+                    div_seccion2.style.backgroundColor = "rgb(35, 199, 191)";
+               
+                     // Funcion anonima flecha que lleva a cabo el bucle
+                        function ContraccionesLentas(){ 
+                                if (countdown > 0) {
+                                    if (toggle) {
+                                        div_showContent.innerHTML = 
+                                        "<h1>" +mensaje_exhala + "</h1>" 
+                                        + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+                                        // Color fondo
+                                        div_showContent.style.backgroundColor = "#cc0000";
+                                        // Continua despues de 5 segundos
+                                        timeOut5S = setTimeout(ContraccionesLentas, 5000);
+                                    } else {
+                                        div_showContent.innerHTML = 
+                                        "<h1>" +mensaje_inhala + "</h1>"
+                                        + "<h2> Repiticiones restantes: " + countdown + "</h2>";
+        
+                                        div_showContent.style.backgroundColor = "green";
+                                        countdown--;
+                                       
+                                       timeOut3S = setTimeout(ContraccionesLentas, 3000);
+                                    } 
+                                    toggle = !toggle;
+                    
+                                } else {
+                                    EndExercise();
+                                }
+                        }
+                        ContraccionesLentas(); // Iniciar el ciclo
+                }
             } else if (accion == 'parar') {
                 EndExercise();
                 console.log('Se para el cronometro');
@@ -112,6 +119,7 @@ function handleButton(button){
 
         // Logica para finalizar el ejercicio independientemente de donde se intente finalizar.
             function EndExercise(){
+                working = false;
                 // Limpia el intervalo que hace el bucle de las rapidas
                 if (interval){
                     clearInterval(interval);
@@ -132,11 +140,15 @@ function handleButton(button){
                     div_showContent.innerHTML = 
                     "  <h1>Exhala | Inhala </h1>" +
                     " <h1>Lo hiciste bien</h1>"
-                    div_showContent.style.backgroundColor = "pink";
-                }
-                
+                    div_showContent.style.backgroundColor = "";
 
+                    // Limpio los fondos de la seccion activada
+                    div_seccion1.style.backgroundColor = "";
+                    div_seccion2.style.backgroundColor = "";
+                }
             }
+
+            
 
 
     }
