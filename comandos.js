@@ -6,6 +6,10 @@ let mensaje_exhala = 'Contrae / Exhala';
 let mensaje_final = 'Ejercicio finalizado';
 let interval;
 let working = false;
+let counterRapidas = 0;
+let counterLentas = 0;
+let timeOut5S;
+let timeOut3S;
 
 function handleButton(button){
     const tipo = button.getAttribute('data-tipo');
@@ -19,7 +23,7 @@ function handleButton(button){
         case 'rapidas': 
             if (accion =='iniciar'){
                 console.log('Se inicia el cronometro');
-                countdown = 10;
+                countdown = 2;
 
                 if (working) {
                     EndExercise();
@@ -48,6 +52,7 @@ function handleButton(button){
                             toggle = !toggle;
             
                         } else {
+                            counterRapidas++;
                             EndExercise();
                         }
                     }
@@ -68,7 +73,7 @@ function handleButton(button){
         case 'lentas':
             if (accion == 'iniciar'){
                 console.log('Se inicia el cronometro');
-                countdown = 10;
+                countdown = 1;
 
                 if (working){
                     EndExercise();
@@ -104,7 +109,9 @@ function handleButton(button){
                                     toggle = !toggle;
                     
                                 } else {
+                                    counterLentas++;
                                     EndExercise();
+                                    console.log(counterRapidas, counterLentas);
                                 }
                         }
                         ContraccionesLentas(); // Iniciar el ciclo
@@ -146,24 +153,31 @@ function handleButton(button){
                     div_seccion1.style.backgroundColor = "";
                     div_seccion2.style.backgroundColor = "";
                 }
+
+                actualDate = new Date();
+                Completados(counterRapidas, counterLentas, actualDate);
             }
-
-            
-
-
-    }
-
-   /* if (tipo == 'rapidas' && accion=='iniciar'){
-       //  console.log('La mama de la mama')
-        for (i = 10; i > 0; i--){
-            console.log(`Faltan ${i} repeticiones`);
-        }
-    }
-    */
+    } // Fin del switch
+}
 
 
+const h1Rapidas = document.querySelector(".RapidasCompletas");
+const h1Lentas = document.querySelector(".LentasCompletas");
+const h1Fecha = document.querySelector(".Fecha");
 
 
-  
+function Completados(counterRapidas, counterLentas, actualDate){
+    console.log(counterRapidas, counterLentas, actualDate);
+    localStorage.setItem("RapidasCompletadas", counterRapidas);
+    localStorage.setItem("LentasCompletadas", counterLentas );
+    localStorage.setItem("Fecha", actualDate);
 
+}
+
+window.addEventListener("load", showHistory());
+
+function showHistory(){
+    h1Rapidas.textContent = `Series Rapidas: ` .;
+    h1Lentas.textContent = 'Series lentas: ' .;
+    h1Fecha.textContent = 'Fecha: ' .;
 }
